@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-
 @Entity
 @Table(name = "products")
 @Getter
@@ -16,15 +15,16 @@ import lombok.AllArgsConstructor;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Long id;
 
-    @Column(name = "name")
-    private String productName;
+    @Column(name = "productname")
+    private String name;
 
-    @Column(name = "type")
-    private String productType;
+    @Column(name = "producttype")
+    private String type;
 
-    @Column(name = "price")
-    private Double productPrice;
+    @Column(name = "productprice")
+    private Double price;
 
 }

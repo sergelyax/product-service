@@ -2,11 +2,12 @@ package com.aston.productservice.controller;
 
 import com.aston.productservice.dto.ProductDTO;
 import com.aston.productservice.service.ProductService;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -34,21 +35,27 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDto) {
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDto) {
         ProductDTO newProduct = productService.createProduct(productDto);
-        return ResponseEntity.ok(newProduct);
+        return ResponseEntity
+                .created(URI.create(String.format("/api/products/%s", newProduct.getId())))
+                .body(newProduct);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDto) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO productDto) {
         return productService.updateProduct(id, productDto)
-                .map(ResponseEntity::ok)
+                .map(product -> ResponseEntity.ok().body(product))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return ResponseEntity.ok().build();
+        boolean isDeleted = productService.deleteProduct(id);
+        if (isDeleted) {
+            return ResponseEntity.noContent().build(); // Используется статус 204 No Content
+        } else {
+            return ResponseEntity.notFound().build(); // Статус 404 Not Found, если продукт не найден
+        }
     }
 }

@@ -1,52 +1,34 @@
 package com.aston.productservice.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductDTO {
 
     private Long id;
+
+    @NotNull
+    @Size(min = 1, max = 255)
     private String productName;
+
+    @NotNull
+    @Size(min = 1, max = 255)
     private String productType;
+
+    @NotNull
+    @Positive
     private Double productPrice;
-
-    public ProductDTO() {
-    }
-
-    public ProductDTO(Long id, String productName, String productType, Double productPrice) {
-        this.id = id;
-        this.productName = productName;
-        this.productType = productType;
-        this.productPrice = productPrice;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getProductType() {
-        return productType;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
-
-    public Double getProductPrice() {
-        return productPrice;
-    }
-
-    public void setProductPrice(Double productPrice) {
-        this.productPrice = productPrice;
-    }
 
 }
